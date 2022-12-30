@@ -8,9 +8,8 @@ import mainRouter from './routes';
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
-
 app
+  .use(morgan('dev'))
   .use(responseEnhancer())
   .use(cors({ credentials: true, origin: /^/ }))
   .use(mainRouter);

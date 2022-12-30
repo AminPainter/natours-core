@@ -4,7 +4,10 @@ import tourRouter from './tour.routes';
 const mainRouter = express.Router();
 
 mainRouter.get('/health', (req, res) =>
-  res.json({ status: 'success', message: 'Server is healthy!' })
+  res.json({
+    status: 'success',
+    message: 'Server is healthy, wealthy and sexy!',
+  })
 );
 
 mainRouter
