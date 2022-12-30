@@ -3,6 +3,10 @@ import tourRouter from './tour.routes';
 
 const mainRouter = express.Router();
 
+mainRouter.get('/health', (req, res) =>
+  res.json({ status: 'success', message: 'Server is healthy!' })
+);
+
 mainRouter
   .use('/tours', tourRouter)
   .use('/users', tourRouter)
