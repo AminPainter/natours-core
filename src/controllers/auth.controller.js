@@ -34,6 +34,7 @@ export const handleGoogleRedirect = catchAsync(async (req, res) => {
 
   res.cookie('jwt', token, {
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
     domain:
       process.env.NODE_ENV === 'production'
         ? 'natours.gatsbyjs.io'
