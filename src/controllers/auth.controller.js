@@ -36,7 +36,7 @@ export const handleGoogleRedirect = catchAsync(async (req, res) => {
     secure: process.env.NODE_ENV === 'production',
     domain:
       process.env.NODE_ENV === 'production'
-        ? 'natours-jyb4.onrender.com'
+        ? 'natours.gatsbyjs.io'
         : 'localhost',
     httpOnly: true,
     maxAge:
