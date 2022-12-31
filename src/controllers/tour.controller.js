@@ -1,7 +1,7 @@
 import multerUpload from '../config/multer';
 import Tour from '../models/tour.model';
 import catchAsync from '../utils/catch-async';
-import storeToCloudinary from '../utils/cloudinary-uploader';
+import storeToCloudinary from '../services/cloudinary.service';
 
 export const createTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.create(req.body);

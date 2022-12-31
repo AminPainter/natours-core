@@ -1,29 +1,23 @@
 import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
 
-import oauthClient from '../config/google';
+import * as googleService from '../services/google.service';
 import User from '../models/user.model';
 import catchAsync from '../utils/catch-async';
 import AppError from '../utils/error';
 
 export const getGoogleAuthScreen = (req, res) =>
-  res.redirect(
-    oauthClient.generateAuthUrl({
-      scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
-      ],
-    })
-  );
+  res.redirect(googleService.getGoogleAuthUri(req.query.sourceUri));
 
 export const handleGoogleRedirect = catchAsync(async (req, res) => {
-  const { tokens } = await oauthClient.getToken(req.query.code);
-  const googleUser = await (
-    await fetch(
-      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${tokens.access_token}`
-    )
-  ).json();
+  const { code, state } = req.query;
+  if (!code || !state)
+    throw new AppError(
+      'Either code or state parameter was missing in the request'
+    );
 
+  const tokens = await googleService.getCredentialsByCode(code);
+  const googleUser = await googleService.getGoogleUser(tokens.access_token);
   if (!googleUser.verified_email)
     throw new AppError('Your google email address has not been verified');
 
@@ -46,5 +40,5 @@ export const handleGoogleRedirect = catchAsync(async (req, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
   });
 
-  res.formatter[user.isNew ? 'created' : 'ok']({ user, token });
+  res.redirect(JSON.parse(state).sourceUri);
 });
