@@ -1,35 +1,14 @@
 import multerUpload from '../config/multer';
 import Tour from '../models/tour.model';
-import catchAsync from '../utils/catch-async';
+import { catchAsync } from '../utils';
 import storeToCloudinary from '../services/cloudinary.service';
+import * as handlerFactory from './factory';
 
-export const createTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.create(req.body);
-  res.formatter.created(tour);
-});
-
-export const getAllTours = catchAsync(async (req, res, next) => {
-  const tours = await Tour.find(req.query);
-  res.formatter.ok(tours, { results: tours.length });
-});
-
-export const getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
-  res.formatter.ok(tour);
-});
-
-export const updateTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.formatter.ok(tour);
-});
-
-export const deleteTour = catchAsync(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
-  res.formatter.noContent();
-});
+export const createTour = handlerFactory.createOne(Tour);
+export const getAllTours = handlerFactory.getAll(Tour);
+export const getTour = handlerFactory.getOne(Tour);
+export const updateTour = handlerFactory.updateOne(Tour);
+export const deleteTour = handlerFactory.deleteOne(Tour);
 
 export const getTopTours = catchAsync(async (req, res, next) => {
   res.formatter.ok(

@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import * as googleService from '../services/google.service';
 import User from '../models/user.model';
-import catchAsync from '../utils/catch-async';
-import AppError from '../utils/error';
+import { catchAsync, AppError } from '../utils';
 
 export const getGoogleAuthScreen = (req, res) =>
   res.redirect(googleService.getGoogleAuthUri(req.query.sourceUri));
@@ -41,4 +40,18 @@ export const handleGoogleRedirect = catchAsync(async (req, res) => {
   });
 
   res.redirect(JSON.parse(state).sourceUri);
+});
+
+export const protect = catchAsync(async (req, res, next) => {
+  const { jwt: token } = req.cookies;
+  if (!token)
+    throw new AppError('Please login to get access to this route', 401);
+
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  if (!decoded) throw new AppError('Invalid token', 401);
+
+  const user = await User.findById(decoded.id);
+  req.user = user;
+
+  next();
 });

@@ -1,6 +1,6 @@
 import multer from 'multer';
 
-import AppError from '../utils/error';
+import { AppError } from '../utils';
 
 const multerUpload = multer({
   storage: multer.memoryStorage(),
