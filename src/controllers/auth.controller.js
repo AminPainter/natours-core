@@ -34,6 +34,10 @@ export const handleGoogleRedirect = catchAsync(async (req, res) => {
 
   res.cookie('jwt', token, {
     secure: process.env.NODE_ENV === 'production',
+    domain:
+      process.env.NODE_ENV === 'production'
+        ? 'natours-jyb4.onrender.com'
+        : 'localhost',
     httpOnly: true,
     maxAge:
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
