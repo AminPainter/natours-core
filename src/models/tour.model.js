@@ -1,7 +1,22 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 
-const schema = mongoose.Schema(
+const pointSchema = new mongoose.Schema({
+  description: String,
+  type: {
+    type: String,
+    enum: ['Point'],
+    default: 'Point',
+  },
+  coordinates: {
+    type: [Number],
+    required: [true, 'A tour must have coordinates for its location fields'],
+  },
+  address: String,
+  day: Number,
+});
+
+const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -41,6 +56,8 @@ const schema = mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be below 5.0'],
     },
     ratingsQuantity: {
       type: Number,
@@ -62,6 +79,11 @@ const schema = mongoose.Schema(
       type: [mongoose.Types.ObjectId],
       ref: 'User',
     },
+    startLocation: {
+      type: pointSchema,
+      required: [true, 'A tour must have a start location'],
+    },
+    locations: [pointSchema],
     slug: String,
   },
   {
@@ -71,10 +93,10 @@ const schema = mongoose.Schema(
   }
 );
 
-schema.pre('save', function (next) {
+tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-const Tour = mongoose.model('Tour', schema);
+const Tour = mongoose.model('Tour', tourSchema);
 export default Tour;
