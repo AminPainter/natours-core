@@ -48,9 +48,12 @@ export const protect = catchAsync(async (req, res, next) => {
     throw new AppError('Please login to get access to this route', 401);
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  if (!decoded) throw new AppError('Invalid token', 401);
+  if (!decoded) throw new AppError('Invalid token', 403);
 
   const user = await User.findById(decoded.id);
+  if (!user)
+    throw new AppError('The user belonging to this token does not exist', 403);
+
   req.user = user;
 
   next();
