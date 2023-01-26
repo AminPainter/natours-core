@@ -10,6 +10,7 @@ import mainRouter from './routes';
 const app = express();
 
 app
+  .use(express.json())
   .use(morgan('dev'))
   .use(cookieParser())
   .use(responseEnhancer())
