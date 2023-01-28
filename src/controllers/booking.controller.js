@@ -2,6 +2,7 @@ import { AppError, catchAsync } from '../utils';
 import * as razorpayService from '../services/razorpay.service';
 import Tour from '../models/tour.model';
 import Booking from '../models/booking.model';
+import * as handlerFactory from './factory';
 
 export const bookTour = catchAsync(async (req, res, next) => {
   const { tourId } = req.params;
@@ -18,10 +19,19 @@ export const bookTour = catchAsync(async (req, res, next) => {
   );
 });
 
-export const createBooking = catchAsync(async (req, res, next) => {
+export const createBookingFromWebhook = (req, res, next) => {
   const payment = req.body.payload.payment.entity;
+  if (
+    !razorpayService.isPaymentVerified(
+      req.body,
+      req.headers['x-razorpay-signature']
+    )
+  )
+    return next(
+      new AppError('Unable to book tour because of suspicious payment')
+    );
 
-  const booking = await Booking.create({
+  req.body = {
     tourId: payment.notes.tourId,
     userId: payment.notes.userId,
     payment: {
@@ -31,7 +41,13 @@ export const createBooking = catchAsync(async (req, res, next) => {
       currency: payment.currency,
       method: payment.method,
     },
-  });
+  };
 
-  res.formatter.ok(booking);
-});
+  next();
+};
+
+export const createBooking = handlerFactory.createOne(Booking);
+export const getAllBookings = handlerFactory.getAll(Booking);
+export const getBooking = handlerFactory.getOne(Booking);
+export const updateBooking = handlerFactory.updateOne(Booking);
+export const deleteBooking = handlerFactory.deleteOne(Booking);

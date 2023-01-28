@@ -6,6 +6,7 @@ import { responseEnhancer } from 'express-response-formatter';
 import cookieParser from 'cookie-parser';
 
 import mainRouter from './routes';
+import globalErrorHandler from './controllers/error.controller';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app
   .use(cookieParser())
   .use(responseEnhancer())
   .use(cors({ credentials: true, origin: /^/ }))
-  .use(mainRouter);
+  .use(mainRouter)
+  .use(globalErrorHandler);
 
 export default app;
