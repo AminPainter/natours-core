@@ -93,8 +93,19 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+tourSchema.virtual('reviews', {
+  localField: '_id',
+  foreignField: 'tour',
+  ref: 'Review',
+});
+
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+tourSchema.pre('findOne', function (next) {
+  this.populate({ path: 'guides', select: 'name role picture' });
   next();
 });
 

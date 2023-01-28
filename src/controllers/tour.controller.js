@@ -6,7 +6,7 @@ import * as handlerFactory from './factory';
 
 export const createTour = handlerFactory.createOne(Tour);
 export const getAllTours = handlerFactory.getAll(Tour);
-export const getTour = handlerFactory.getOne(Tour);
+export const getTour = handlerFactory.getOne(Tour, { path: 'reviews' });
 export const updateTour = handlerFactory.updateOne(Tour);
 export const deleteTour = handlerFactory.deleteOne(Tour);
 

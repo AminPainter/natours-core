@@ -2,8 +2,11 @@ import express from 'express';
 
 import * as tourController from '../controllers/tour.controller';
 import * as authController from '../controllers/auth.controller';
+import reviewRouter from './review.routes';
 
 const router = express.Router();
+
+router.use('/:tourId/reviews', reviewRouter);
 
 router.get('/popular', tourController.getTopTours);
 router.get('/', tourController.getAllTours);

@@ -3,6 +3,7 @@ import tourRouter from './tour.routes';
 import authRouter from './auth.routes';
 import userRouter from './user.routes';
 import bookingRouter from './booking.routes';
+import reviewRouter from './review.routes';
 
 const mainRouter = express.Router();
 
@@ -17,7 +18,7 @@ mainRouter
   .use('/tours', tourRouter)
   .use('/auth', authRouter)
   .use('/users', userRouter)
-  .use('/reviews', tourRouter)
+  .use('/reviews', reviewRouter)
   .use('/bookings', bookingRouter);
 
 export default mainRouter;

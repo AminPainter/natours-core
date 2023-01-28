@@ -30,9 +30,12 @@ export const getAll = Model =>
     res.formatter.ok(docs, { results: docs.length });
   });
 
-export const getOne = Model =>
+export const getOne = (Model, populateOptions) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    const query = Model.findById(req.params.id);
+    if (populateOptions) query.populate(populateOptions);
+
+    const doc = await query;
     res.formatter.ok(doc);
   });
 
