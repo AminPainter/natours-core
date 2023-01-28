@@ -1,19 +1,21 @@
 import express from 'express';
 
 import * as tourController from '../controllers/tour.controller';
+import * as authController from '../controllers/auth.controller';
 
 const router = express.Router();
 
 router.get('/popular', tourController.getTopTours);
+router.get('/', tourController.getAllTours);
+router.get('/:id', tourController.getTour);
 
-router
-  .route('/')
-  .get(tourController.getAllTours)
-  .post(tourController.createTour);
+// /////////////////////////////////////////
+router.use(authController.protect, authController.restrictTo('admin'));
+
+router.post('/', tourController.createTour);
 
 router
   .route('/:id')
-  .get(tourController.getTour)
   .patch(
     tourController.uploadTourImages,
     tourController.storeTourImages,

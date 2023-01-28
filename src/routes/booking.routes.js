@@ -16,6 +16,7 @@ router.post(
   bookingController.createBooking
 );
 
+// /////////////////////////////////////////
 router.use(
   authController.protect,
   authController.restrictTo('admin', 'lead-guide')

@@ -63,7 +63,8 @@ export const restrictTo =
   (...roles) =>
   (req, res, next) => {
     next(
-      roles.includes(req.user.role) ||
-        new AppError('You are not allowed to access this route', 403)
+      roles.includes(req.user.role)
+        ? null
+        : new AppError('You are not allowed to access this route', 403)
     );
   };
