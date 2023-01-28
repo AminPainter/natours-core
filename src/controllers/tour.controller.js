@@ -6,9 +6,13 @@ import * as handlerFactory from './factory';
 
 export const createTour = handlerFactory.createOne(Tour);
 export const getAllTours = handlerFactory.getAll(Tour);
-export const getTour = handlerFactory.getOne(Tour, { path: 'reviews' });
+export const getTour = handlerFactory.getOne(Tour);
 export const updateTour = handlerFactory.updateOne(Tour);
 export const deleteTour = handlerFactory.deleteOne(Tour);
+
+export const getTourBySlug = catchAsync(async (req, res, next) => {
+  res.formatter.ok(await Tour.findOne({ slug: req.params.slug }));
+});
 
 export const getTopTours = catchAsync(async (req, res, next) => {
   res.formatter.ok(

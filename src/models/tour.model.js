@@ -99,13 +99,17 @@ tourSchema.virtual('reviews', {
   ref: 'Review',
 });
 
+tourSchema.index({ slug: 1 });
+
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
 tourSchema.pre('findOne', function (next) {
-  this.populate({ path: 'guides', select: 'name role picture' });
+  this.populate({ path: 'guides', select: 'name role picture' }).populate({
+    path: 'reviews',
+  });
   next();
 });
 

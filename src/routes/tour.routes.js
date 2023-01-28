@@ -10,6 +10,7 @@ router.use('/:tourId/reviews', reviewRouter);
 
 router.get('/popular', tourController.getTopTours);
 router.get('/', tourController.getAllTours);
+router.get('/slug/:slug', tourController.getTourBySlug);
 router.get('/:id', tourController.getTour);
 
 // /////////////////////////////////////////
