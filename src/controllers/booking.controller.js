@@ -4,7 +4,7 @@ import Tour from '../models/tour.model';
 import Booking from '../models/booking.model';
 import * as handlerFactory from './factory';
 
-export const bookTour = catchAsync(async (req, res, next) => {
+export const bookTour = catchAsync(async (req, res) => {
   const { tourId } = req.params;
   if (!tourId) throw new AppError('No tour was specified with the request');
 

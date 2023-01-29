@@ -10,11 +10,11 @@ export const getTour = handlerFactory.getOne(Tour);
 export const updateTour = handlerFactory.updateOne(Tour);
 export const deleteTour = handlerFactory.deleteOne(Tour);
 
-export const getTourBySlug = catchAsync(async (req, res, next) => {
+export const getTourBySlug = catchAsync(async (req, res) => {
   res.formatter.ok(await Tour.findOne({ slug: req.params.slug }));
 });
 
-export const getTopTours = catchAsync(async (req, res, next) => {
+export const getTopTours = catchAsync(async (req, res) => {
   res.formatter.ok(
     await Tour.find({
       $or: [

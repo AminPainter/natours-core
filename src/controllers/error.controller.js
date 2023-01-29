@@ -15,6 +15,7 @@ const handleDuplicateKeyErrorDB = err =>
     )}`
   );
 
+// eslint-disable-next-line no-unused-vars
 export default (err, req, res, next) => {
   let error = Object.assign(err);
 
